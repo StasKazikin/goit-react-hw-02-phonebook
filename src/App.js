@@ -3,9 +3,15 @@ import shortid from "shortid";
 
 class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+    ],
     name: "",
     number: "",
+    filter: "",
   };
 
   nameInputId = shortid.generate();
@@ -41,7 +47,18 @@ class App extends Component {
     this.reset();
   };
 
+  changeFilter = (event) => {
+    this.setState({
+      filter: event.currentTarget.value,
+    });
+  };
+
   render() {
+    const { contacts, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    const filteredContacts = contacts.filter(({ name }) =>
+      name.toLowerCase().includes(normalizedFilter)
+    );
     return (
       <section>
         <h1>Phonebook</h1>
@@ -69,8 +86,17 @@ class App extends Component {
           <button type="submit">Add contact</button>
         </form>
         <h2>Contacts</h2>
+        <label>
+          Find contacts by name
+          <input
+            type="text"
+            name="filter"
+            value={this.state.filter}
+            onChange={this.changeFilter}
+          ></input>
+        </label>
         <ul>
-          {this.state.contacts.map(({ name, number, id }) => (
+          {filteredContacts.map(({ name, number, id }) => (
             <li key={id}>
               {name}: {number}
             </li>
