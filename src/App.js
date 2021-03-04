@@ -5,14 +5,21 @@ class App extends Component {
   state = {
     contacts: [],
     name: "",
+    number: "",
   };
 
   nameInputId = shortid.generate();
+  numberInputId = shortid.generate();
 
   handleInput = (event) => {
+    const { name, value } = event.currentTarget;
     this.setState({
-      name: event.currentTarget.value,
+      [name]: value,
     });
+  };
+
+  reset = () => {
+    this.setState({ name: "", number: "" });
   };
 
   handleSubmit = (event) => {
@@ -21,9 +28,17 @@ class App extends Component {
     this.setState((prevState) => ({
       contacts: [
         ...prevState.contacts,
-        ...[{ name: this.state.name, id: this.nameInputId }],
+        ...[
+          {
+            name: this.state.name,
+            number: this.state.number,
+            id: shortid.generate(),
+          },
+        ],
       ],
     }));
+
+    this.reset();
   };
 
   render() {
@@ -31,16 +46,34 @@ class App extends Component {
       <section>
         <h1>Phonebook</h1>
         <form onSubmit={this.handleSubmit}>
-          <label>
+          <label htmlFor={this.nameInputId}>
             Name
-            <input type="text" name="name" onChange={this.handleInput}></input>
+            <input
+              type="text"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleInput}
+              id={this.nameInputId}
+            ></input>
+          </label>
+          <label htmlFor={this.numberInputId}>
+            Number
+            <input
+              type="text"
+              name="number"
+              value={this.state.number}
+              onChange={this.handleInput}
+              id={this.numberInputId}
+            ></input>
           </label>
           <button type="submit">Add contact</button>
         </form>
         <h2>Contacts</h2>
         <ul>
-          {this.state.contacts.map(({ name, id }) => (
-            <li key={id}>{name}</li>
+          {this.state.contacts.map(({ name, number, id }) => (
+            <li key={id}>
+              {name}: {number}
+            </li>
           ))}
         </ul>
       </section>
