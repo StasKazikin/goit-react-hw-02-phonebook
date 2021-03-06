@@ -1,5 +1,7 @@
 import { Component } from "react";
-import shortid from "shortid";
+import ContactForm from "./components/ContactForm";
+import Filter from "./components/Filter";
+import ContactList from "./components/ContactList";
 
 class App extends Component {
   state = {
@@ -9,42 +11,13 @@ class App extends Component {
       { id: "id-3", name: "Eden Clements", number: "645-17-79" },
       { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
     ],
-    name: "",
-    number: "",
     filter: "",
   };
 
-  nameInputId = shortid.generate();
-  numberInputId = shortid.generate();
-
-  handleInput = (event) => {
-    const { name, value } = event.currentTarget;
-    this.setState({
-      [name]: value,
+  addContact = (newContact) => {
+    this.setState(({ contacts }) => {
+      return { contacts: [...contacts, newContact] };
     });
-  };
-
-  reset = () => {
-    this.setState({ name: "", number: "" });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    this.setState((prevState) => ({
-      contacts: [
-        ...prevState.contacts,
-        ...[
-          {
-            name: this.state.name,
-            number: this.state.number,
-            id: shortid.generate(),
-          },
-        ],
-      ],
-    }));
-
-    this.reset();
   };
 
   changeFilter = (event) => {
@@ -53,56 +26,24 @@ class App extends Component {
     });
   };
 
-  render() {
+  filterContacts = () => {
     const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
-    const filteredContacts = contacts.filter(({ name }) =>
+    return contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
+  };
+
+  render() {
+    const filteredContacts = this.filterContacts();
     return (
-      <section>
+      <div>
         <h1>Phonebook</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor={this.nameInputId}>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleInput}
-              id={this.nameInputId}
-            ></input>
-          </label>
-          <label htmlFor={this.numberInputId}>
-            Number
-            <input
-              type="text"
-              name="number"
-              value={this.state.number}
-              onChange={this.handleInput}
-              id={this.numberInputId}
-            ></input>
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
+        <ContactForm onSubmit={this.addContact} />
         <h2>Contacts</h2>
-        <label>
-          Find contacts by name
-          <input
-            type="text"
-            name="filter"
-            value={this.state.filter}
-            onChange={this.changeFilter}
-          ></input>
-        </label>
-        <ul>
-          {filteredContacts.map(({ name, number, id }) => (
-            <li key={id}>
-              {name}: {number}
-            </li>
-          ))}
-        </ul>
-      </section>
+        <Filter filter={this.state.filter} onChange={this.changeFilter} />
+        <ContactList contacts={filteredContacts} />
+      </div>
     );
   }
 }
