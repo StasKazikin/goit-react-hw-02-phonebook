@@ -1,16 +1,13 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 import shortid from "shortid";
+import { form, label, input, button } from "./ContactForm.module.scss";
 
 class ContactForm extends Component {
   state = {
     name: "",
     number: "",
   };
-
-  // static propTypes = {
-  //   onSubmit: PropTypes.func.isRequired,
-  // };
 
   nameInputId = shortid.generate();
   numberInputId = shortid.generate();
@@ -41,10 +38,11 @@ class ContactForm extends Component {
     const { name, number } = this.state;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label htmlFor={this.nameInputId}>
+      <form className={form} onSubmit={this.handleSubmit}>
+        <label className={label} htmlFor={this.nameInputId}>
           Name
           <input
+            className={input}
             type="text"
             name="name"
             value={name}
@@ -52,9 +50,10 @@ class ContactForm extends Component {
             id={this.nameInputId}
           ></input>
         </label>
-        <label htmlFor={this.numberInputId}>
+        <label className={label} htmlFor={this.numberInputId}>
           Number
           <input
+            className={input}
             type="text"
             name="number"
             value={number}
@@ -62,7 +61,9 @@ class ContactForm extends Component {
             id={this.numberInputId}
           ></input>
         </label>
-        <button type="submit">Add contact</button>
+        <button className={button} type="submit">
+          Add contact
+        </button>
       </form>
     );
   }

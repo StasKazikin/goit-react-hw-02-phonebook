@@ -1,16 +1,19 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
+import { list, item, button } from "./ContactList.module.scss";
 
 class ContactList extends Component {
   render() {
     const { contacts, onClick } = this.props;
 
     return (
-      <ul>
+      <ul className={list}>
         {contacts.map(({ name, number, id }) => (
-          <li key={id}>
-            {name}: {number}
-            <button id={id} type="button" onClick={onClick}>
+          <li className={item} key={id}>
+            <span>
+              {name}: {number}
+            </span>
+            <button className={button} id={id} type="button" onClick={onClick}>
               Delete
             </button>
           </li>
@@ -22,6 +25,7 @@ class ContactList extends Component {
 
 ContactList.propTypes = {
   contacts: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ContactList;
