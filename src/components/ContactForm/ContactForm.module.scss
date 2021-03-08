@@ -31,7 +31,7 @@
     border-radius: 6px;
     cursor: pointer;
     background-color: #fff;
-    &:hover {
+    &:focus {
       background-color: rgb(17, 97, 201);
       outline: none;
     }
